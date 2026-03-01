@@ -6,7 +6,7 @@ date: 2026-03-01
 
 When you have a hammer, everything looks like a nail.
 
-I was watching a cartoon yesterday and there was a poker scene. Nothing special, just characters bluffing and trash-talking over a hand. But somewhere between the river card and the showdown, my brain did the thing it always does: it started modeling the game as a multi-party computation[^mpc] protocol.
+I was watching *Hilda*[^hilda] yesterday and there was a poker scene where the blue-haired girl got lost to a forest giant. Fun scene, but still just an ordinary poker game. Somewhere between the river card and the showdown, my brain did the thing it always does: it started modeling the game as a multi-party computation[^mpc] protocol.
 
 This is what happens when you spend years formalizing MPC. You stop seeing card games. You start seeing private inputs, evaluation rounds, and output revelation.
 
@@ -78,6 +78,8 @@ The MPC lens does not add new computational tools for analyzing poker. What it d
 When you have a hammer, everything looks like a nail. Sometimes the nail was already hammered in by someone else using a different tool. But it is still satisfying to notice it is there.
 
 ## Notes
+
+[^hilda]: *Hilda* is a British-Canadian animated series based on the graphic novel series by Luke Pearson, following a blue-haired girl and her adventures with magical creatures. [Netflix](https://www.netflix.com/title/80115346)
 
 [^mpc]: Secure multi-party computation allows $n$ parties to jointly compute a function $f(x_1, \ldots, x_n)$ over their private inputs without revealing anything beyond the output. Introduced by Yao for the two-party case and generalized by Goldreich, Micali, and Wigderson. See: A. Yao, "Protocols for Secure Computations," *FOCS*, 1982; O. Goldreich, S. Micali, A. Wigderson, "How to Play any Mental Game," *STOC*, 1987. [DOI:10.1145/28395.28420](https://doi.org/10.1145/28395.28420)
 

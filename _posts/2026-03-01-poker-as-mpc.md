@@ -31,7 +31,7 @@ This is the part that caught me. A player sitting with a single chip left can go
 
 More precisely, their expected value is:
 
-$$E\lbrack\text{pot} \times \mathbf{1}(f \text{ outputs } i) \mid \text{hand}_i\rbrack$$
+$$E[\text{pot} \times \mathbf{1}(f \text{ outputs } i) \mid \text{hand}_i]$$
 
 This is a local, conditional expected value[^condexp]. It can be much larger than the physical stack in front of them.
 

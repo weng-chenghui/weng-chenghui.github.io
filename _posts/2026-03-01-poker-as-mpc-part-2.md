@@ -10,25 +10,25 @@ But it is too clean. It misses what makes poker actually interesting.
 
 Yao's problem assumes the parties want to learn the output. They run the protocol faithfully, they get the answer, done. Poker is not like that at all. In poker, the interesting part is everything players do to prevent each other from learning the output correctly.
 
-## The result is already decided
+## The showdown ranking is already decided
 
-Here is the thing I kept circling back to. Once the dealer deals the cards, the winner is determined. The function $f(h_1, \ldots, h_n) = \text{argmax}(\text{score}(h_i))$ has already been evaluated. The output exists. It is sitting right there on the table, face down.
+Here is the thing I kept circling back to. Once the dealer deals the cards, the *showdown ranking* is determined. If every player stayed in to the end and turned their cards over, $\text{argmax}(\text{score}(h_i))$ would tell you who wins. That much is fixed at deal time.
 
-Everything that happens after the deal is not computation. The computation is done. What follows is a strategic interaction over whether the parties can correctly infer the output from incomplete information, or whether they can be misled about it.
+But the showdown ranking is not the result. The result is who gets the chips and how many. And that depends on what players actually *do*: who bets, who folds, who bluffs, how large the pot grows. Two identical deals can produce completely different chip transfers. The cards fix the parameters. They do not fix the outcome.
 
-This is a strange situation from the MPC perspective. Normally the protocol exists to compute $f$. Here, $f$ is already computed. The "protocol" that follows is about manipulating beliefs about the output.
+This requires refining the Part 1 mapping. There I wrote $f(h_1, \ldots, h_n) = \text{argmax}(\text{score}(h_i))$, treating cards as the private inputs to the computation. That is correct for the showdown, but the showdown is only one possible endpoint. The actual computation is $f(s_1(h_1), \ldots, s_n(h_n))$, where each $s_i$ is player $i$'s strategy, parameterized by their hand $h_i$. The cards are not the secret inputs. They are parameters that shape each player's strategy function. The strategy itself is the secret input.
 
 ## Actions as prediction poisoning
 
 In a standard MPC protocol, a malicious adversary[^malicious] might tamper with messages, substitute inputs, or abort early. These attacks target the computation itself. The adversary tries to make $f$ evaluate incorrectly or to learn more than the output.
 
-Poker players do none of this. They cannot change the cards. They cannot alter the hand-ranking function. They cannot peek at other players' private inputs. What they can do is make other players wrong about who holds the best hand.
+Poker players do none of this. They cannot change the cards. They cannot alter the hand-ranking function. They cannot peek at other players' private inputs. But their actions are not mere commentary on a finished computation. Each bet, raise, and fold is a step in evaluating $f(s_1, \ldots, s_n)$. The strategies are the inputs, and the strategies unfold through play. The computation is happening in real time.
 
-A big bet says "I am strong." A slow call says "I am uncertain." A check-raise says "I was hiding strength." Each of these is a signal[^signaling] designed to shift an opponent's posterior probability over possible hands. The goal is not to corrupt the computation but to corrupt the prediction.
+A big bet says "I am strong." A slow call says "I am uncertain." A check-raise says "I was hiding strength." Each of these is a signal[^signaling] designed to shift an opponent's posterior, but not just their belief about the showdown ranking. What is really being poisoned is the opponent's model of your *strategy*. If they misread your strategy, they misplay their own, and the actual outcome shifts.
 
-This is closer to Bayesian persuasion[^persuasion] than to any standard MPC adversary model. In Bayesian persuasion, a sender designs signals to shift a receiver's beliefs about a state of the world that is already fixed. The sender does not change reality. They change what the receiver believes about reality. That is exactly what a poker player does when they bluff.
+This has a Bayesian persuasion[^persuasion] flavor, but with a critical difference. In textbook Bayesian persuasion, the state of the world is fixed and the sender designs signals to shift beliefs about that fixed state. In poker, the outcome genuinely changes based on the actions taken. A successful bluff does not just make the opponent *believe* you will win. It makes you actually win. The persuasion changes the computation, not just the belief about it.
 
-The difference from the textbook Bayesian persuasion setup is that in poker, everyone is simultaneously a sender and a receiver. Every player is trying to poison every other player's predictions while also trying to maintain accurate predictions of their own. It is persuasion in all directions at once.
+The other difference from the textbook setup is that in poker, everyone is simultaneously a sender and a receiver. Every player is trying to make opponents misread their strategy while also trying to accurately read everyone else's. It is persuasion in all directions at once, where the thing being persuaded about is itself shaped by the persuasion.
 
 ## A new kind of adversary
 
@@ -48,13 +48,13 @@ But no existing framework combines all of this into a single adversary model whe
 
 Here is another way to see what is going on.
 
-The global view is what you would see if you turned all cards face up and removed all player interaction. Just the deal, the board, and the deterministic output of $f$. This is prediction conditioned on zero interactions. It is the zero-noise view.
+The global view is what you would see if you turned all cards face up. You would know the showdown ranking and, with it, the optimal strategy profile: the Nash equilibrium play given perfect information. But you would not know the actual outcome, because the actual outcome still requires the strategies to be executed. The zero-interaction view tells you what *should* happen under optimal play. It does not tell you what *will* happen.
 
-Each player's local view is different. They see their own cards. They see the community cards as they are revealed. And they see the full history of every action every player has taken. Their prediction of $f$'s output is conditioned on all of this.
+Each player's local view is different. They see their own cards. They see the community cards as they are revealed. And they see the full history of every action every player has taken. Their model of each opponent's strategy is conditioned on all of this.
 
-So every view, from the omniscient global view to any player's local view, is a point on a spectrum. The spectrum is parameterized by how much of the action history you condition on. The global view conditions on nothing. A player who just sat down and has not seen any betting conditions only on their own cards. A player deep into the hand conditions on their cards plus every bet, raise, check, and fold that has happened so far.
+So every view, from the omniscient global view to any player's local view, is a point on a spectrum. The spectrum is parameterized by how much of the action history you condition on. The global view conditions on nothing and gives you the strategy profile that rational play would dictate. A player who just sat down conditions only on their own cards. A player deep into the hand conditions on their cards plus every bet, raise, check, and fold that has happened so far.
 
-The interesting thing is that conditioning on more information does not always improve your prediction. If the information has been strategically poisoned, more data can make your estimate worse. This is the whole mechanism of a successful bluff: the target conditions on a false signal and arrives at a worse posterior than if they had ignored the signal entirely.
+The interesting thing is that conditioning on more information does not always improve your model of opponents' strategies. If the information has been strategically poisoned, more data can make your estimate worse. This is the whole mechanism of a successful bluff: the target conditions on a false signal and arrives at a worse model than if they had ignored the signal entirely.
 
 ## The action trace as an integral
 
@@ -80,11 +80,11 @@ The meta-game across many macro-rounds introduces yet another layer. Each player
 
 I want to be honest about the same thing I was honest about last time. This is a lens, not a theory.
 
-The observation that poker's outcome is predetermined at deal time is not new. Poker players call this "running it twice"[^runtwice] or calculating equity. The idea that players manipulate each other's beliefs through betting is the foundation of game-theoretic poker analysis going back decades.
+The observation that poker's showdown ranking is fixed at deal time is not new. Poker players call this "running it twice"[^runtwice] or calculating equity. The idea that players manipulate each other's beliefs through betting is the foundation of game-theoretic poker analysis going back decades.
 
 What is new, at least to me, is noticing that these observations map onto specific open questions in the intersection of MPC and game theory. The "prediction-poisoning adversary" is not a named concept in the literature, but it sits at a well-defined intersection of Bayesian persuasion, rational cryptography, and strategic signaling. The pieces exist. Connecting them through the poker analogy makes the gap visible.
 
-Yao asks: can we compute $f$ without revealing inputs? Poker asks: given that $f$ is already computed, can we manipulate others' beliefs about the output through strategic interaction?
+Yao asks: can we compute $f$ without revealing inputs? Poker asks: given that the parameters are fixed but the strategies are private, how does strategic interaction shape both the computation and others' beliefs about it? The outcome is not pre-computed. It is emergent from the strategy interaction, and the strategies themselves are the secret inputs that the MPC is evaluating.
 
 Different question. Surprisingly similar structure. And the second question does not yet have a formal framework.
 
@@ -120,4 +120,4 @@ Different question. Surprisingly similar structure. And the second question does
 
 [^infoset]: An information set groups all game states that a player cannot distinguish given their available information. Formalized by H. Kuhn, "Extensive Games and the Problem of Information," *Contributions to the Theory of Games, Vol. II*, Princeton University Press, 1953.
 
-[^runtwice]: "Running it twice" is a practice where, after all betting is complete, the remaining community cards are dealt twice to reduce variance. It highlights that once all cards are determined, the outcome is a deterministic function of the deal. For poker mathematics, see: B. Chen, J. Ankenman, *The Mathematics of Poker*, ConJelCo, 2006.
+[^runtwice]: "Running it twice" is a practice where, after all betting is complete, the remaining community cards are dealt twice to reduce variance. It highlights that the showdown ranking is a deterministic function of the cards. But by the time players run it twice, the betting is already over: the strategies have been played, the pot size is fixed, and only the showdown resolution remains. The strategic outcome was already determined by the action trace. For poker mathematics, see: B. Chen, J. Ankenman, *The Mathematics of Poker*, ConJelCo, 2006.

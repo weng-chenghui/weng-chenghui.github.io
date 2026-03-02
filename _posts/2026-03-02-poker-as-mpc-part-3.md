@@ -123,7 +123,7 @@ That is for next time.
 
 ## Notes
 
-[^framework]: The diagrammatic framework I am referring to works in $\mathbf{Set}_\kappa$ and models an $n$-party protocol as a commuting square: execution context $E = (\prod_i X_i) \times \Omega$, protocol map $\pi_S: E \to \prod_i S_i$, input projection $\pi_X: E \to \prod_i X_i$, ideal functionality $f: \prod_i X_i \to Y$, and reconstruction $\rho: \prod_i S_i \to Y$. Correctness is $\rho \circ \pi_S = f \circ \pi_X$. Security extends the base square with adversarial observation morphisms. See Definition 1.1 in: C.-H. Weng, "A Diagrammatic Framework for MPC Protocols: Uniform Description and Information-Geometric Security Analysis," research notes, 2025.
+[^framework]: The diagrammatic framework I am referring to is from ongoing work on abstract MPC. It works in $\mathbf{Set}_\kappa$ and models an $n$-party protocol as a commuting square: execution context $E = (\prod_i X_i) \times \Omega$, protocol map $\pi_S: E \to \prod_i S_i$, input projection $\pi_X: E \to \prod_i X_i$, ideal functionality $f: \prod_i X_i \to Y$, and reconstruction $\rho: \prod_i S_i \to Y$. Correctness is $\rho \circ \pi_S = f \circ \pi_X$. Security extends the base square with adversarial observation morphisms.
 
 [^lln]: This is a law-of-large-numbers statement. The realized chip redistribution in a single hand is a random variable (random over $\Omega$) whose expectation is the ideal output $f(\pi_X(e))$. Over many independent hands with the same inputs, the sample average converges. In practice, poker players call this "running good" or "running bad" — short-term variance around long-term expectation.
 

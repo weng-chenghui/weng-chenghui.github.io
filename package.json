@@ -1,0 +1,15 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "diagrams": "node _diagrams/build.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "node-tikzjax": "^1.0.5"
+  }
+}

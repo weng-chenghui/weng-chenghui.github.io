@@ -42,17 +42,9 @@ An analogy: $f$ is a polynomial. The polynomial does not change when you change 
 
 This gives us a three-level diagram. Part 3's MPC correctness square sits inside a larger rectangle that adds the equilibrium selection layer on top:
 
-```
- ∏ Hᵢ ─────[φ_𝒢]──────→ Y     ← effective outcome (hands → payoffs at equilibrium)
-   │                      ‖
-   │ (h, σ*(h))           ‖ =
-   ↓                      ‖
- ∏ Xᵢ ──────[f]────────→ Y     ← ideal functionality (any inputs → payoffs)
-   ↑                      ↑
-   │ π_X                  │ ρ    ← MPC correctness square
-   │                      │
-   E ───────[π_S]───────→ ∏ Sᵢ  ← protocol execution
-```
+<figure style="text-align: center; margin: 2em 0;">
+<img src="/assets/diagrams/part4-three-level.svg" alt="Three-level diagram: equilibrium selection layer over MPC correctness square" style="max-width: 320px; width: 100%;">
+</figure>
 
 **Three levels, two commutativity conditions.**
 

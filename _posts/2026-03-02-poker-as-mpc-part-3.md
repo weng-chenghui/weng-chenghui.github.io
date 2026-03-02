@@ -16,15 +16,9 @@ The framework models one protocol execution by an *execution context* $E = (\pro
 
 A protocol is then specified by four morphisms arranged in a commuting square:
 
-```
-        π_S
-  E ──────────→ ∏ S_i
-  │               │
-  │ π_X           │ ρ
-  ↓               ↓
- ∏ X_i ────────→  Y
-        f
-```
+<figure style="text-align: center; margin: 2em 0;">
+<img src="/assets/diagrams/part3-correctness-square.svg" alt="MPC correctness square: E maps to product of S_i via protocol, and to product of X_i via projection; both paths yield Y" style="max-width: 260px; width: 100%;">
+</figure>
 
 $\pi_X: E \to \prod_i X_i$ is the projection that forgets the ancilla. $\pi_S: E \to \prod_i S_i$ is the protocol map, sending a full execution to per-party local contexts (partial results). $f: \prod_i X_i \to Y$ is the ideal functionality — what we want to compute. And $\rho: \prod_i S_i \to Y$ is reconstruction — how to recover the output from the local contexts.
 
